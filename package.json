@@ -1,0 +1,40 @@
+{
+  "name": "@racode246/isolate",
+  "version": "0.1.0",
+  "description": "Isolate the dev environment of a git checkout (ports in .env files, docker compose host ports and project name) so several worktrees of one repo can run side by side.",
+  "keywords": ["git", "worktree", "docker-compose", "ports", "dev-environment"],
+  "license": "MIT",
+  "author": "racode246",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/racode246/isolate.git"
+  },
+  "type": "module",
+  "bin": {
+    "isolate": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "schema.json"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && chmod +x dist/cli.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
+}
