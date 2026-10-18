@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unpkg.com/@racode246/isolate/schema.json",
+  "title": "isolate.config.json",
+  "description": "What `isolate apply` resolves in this checkout. Every resolver is enabled when the file or the key is absent.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Default label for the port offset and compose project name (default: the current branch). --name overrides it."
+    },
+    "envPorts": {
+      "description": "Remap KEY=<port> lines in untracked dotenv files.",
+      "oneOf": [
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "files": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "description": "Globs (*, ?, **) relative to the checkout root. Default: every untracked .env / .env.* file outside build and dependency directories. Tracked files are always skipped."
+            },
+            "keyPattern": {
+              "type": "string",
+              "default": "PORT$",
+              "description": "JavaScript regular expression tested against the key."
+            }
+          }
+        }
+      ]
+    },
+    "composePorts": {
+      "description": "Remap docker compose host ports: ${VAR:-default} ones via VAR in .env, hard-coded ones via a generated override (docker compose >= 2.24).",
+      "oneOf": [
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "files": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "description": "Compose files in load order, relative to the checkout root. Default: the primary compose file and its conventional override."
+            }
+          }
+        }
+      ]
+    },
+    "composeProject": {
+      "description": "Set COMPOSE_PROJECT_NAME=<repo>-<label> in .env.",
+      "oneOf": [
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": { "enabled": { "type": "boolean", "default": true } }
+        }
+      ]
+    }
+  }
+}
